@@ -2,11 +2,13 @@ import createNewStore from "./zustand/store";
 
 
 interface InitialStateType {
-    name:string|null
+    organizerName:string|null,
+    organizerId:string|null
 }
 
 const initialState:InitialStateType={
-    name:null
+    organizerName:null,
+    organizerId:null
 }
 
 export const globalState = createNewStore(initialState,{

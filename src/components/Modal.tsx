@@ -12,36 +12,16 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { handleSocketRequests } from "../pages/game/api";
 import { globalState } from "../globalState";
+import { Message } from "@/types";
 
 interface props {
   isOpen: boolean;
   onClose: () => void;
-  socket: WebSocket | null;
-  gameId: string;
 }
-export const ModalForGuest = ({ isOpen, onClose, socket, gameId }: props) => {
-  const {set,name} = globalState()
-  const [loading, setLoading] = useState(false);
-  const handleClose = () => {
-    onClose();
-  };
 
-  const handleJoinGame = async () => {
-    setLoading(true);
-    try {
-      if(!name){return }
 
-      await handleSocketRequests({
-        socket: socket,
-        name: name,
-        type: "join",
-        gameId: gameId,
-      });
-    } catch (err: any) {
-      console.log(err.message);
-    }
-    setLoading(false);
-  };
+export const ModalForGuest = ({ isOpen, onClose}: props) => {
+  
   return (
     <div>
       <Dialog open={isOpen} onOpenChange={onClose}>
@@ -56,7 +36,7 @@ export const ModalForGuest = ({ isOpen, onClose, socket, gameId }: props) => {
               </Label>
               <Input
                 onChange={(e) => {
-                  set({name:e.target.value})
+                  localStorage.setItem("userName",e.target.value)
                 }}
                 className="mt-2"
                 id="display"
@@ -65,9 +45,6 @@ export const ModalForGuest = ({ isOpen, onClose, socket, gameId }: props) => {
               />
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button onClick={handleJoinGame}>Continue to Vote</Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

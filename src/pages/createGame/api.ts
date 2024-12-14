@@ -1,6 +1,6 @@
 
 interface Data {
-    assignedId:string,
+    organizerId:string,
     gameId:string
 }
 

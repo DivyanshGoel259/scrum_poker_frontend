@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Game } from './pages/game/Game-Page'
+import { Game, GamePage } from './pages/game/Game-Page'
 import { CreateGame } from './pages/createGame/CreateGame'
 
 
@@ -10,7 +10,7 @@ function App() {
      <BrowserRouter>
         <Routes>
           <Route path='/' element={<CreateGame/>}/>
-          <Route path='/game/:gameId' element={<Game/>}/>
+          <Route path='/game/:gameId' element={<GamePage/>}/>
         </Routes>
      </BrowserRouter>
     </>

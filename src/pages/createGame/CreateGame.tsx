@@ -1,7 +1,7 @@
 import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createGame } from "./api";
 import { useNavigate } from "react-router-dom";
 import {
@@ -15,25 +15,30 @@ import {
 import { globalState } from "../../globalState";
 
 export const CreateGame = () => {
-  const {set,name} = globalState()
+  const {set,organizerId,organizerName} = globalState()
+  const [gameId,setGameId] = useState<string |null>(null)
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleCreateGame = async () => {
     setLoading(true);
     try {
-      if(!name){return}
-      const [data, err] = await createGame(name);
+      if(!organizerName)return
+      const [data, err] = await createGame(organizerName);
       if (err) {
         throw err;
       }
-      localStorage.setItem("userId",data.assignedId)
-      navigate(`/game/${data.gameId}?from=redirect`);
+      set({organizerId:data.organizerId})
+       setGameId(data.gameId)    
     } catch (err: any) {
       console.log(err.message);
     }
     setLoading(false);
   };
+
+  useEffect(()=>{
+    if(organizerId && gameId)navigate(`/game/${gameId}`); 
+  },[organizerId,gameId])
 
   return (
     <div className="bg-slate-300">
@@ -55,7 +60,7 @@ export const CreateGame = () => {
               </Label>
               <Input
                 onChange={(e) => {
-                  set({name:e.target.value});
+                  set({organizerName:e.target.value});
                 }}
                 id="name"
                 className="mt-1 text-black"
