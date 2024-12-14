@@ -9,6 +9,7 @@ interface props {
 }
 
 export const PlayerCard = ({ player, revealed }: props) => {
+    console.log(player.name);
     return (
         <div className="flex flex-col items-center space-y-2">
             <div
@@ -19,7 +20,7 @@ export const PlayerCard = ({ player, revealed }: props) => {
       transition-all duration-500
     `}
             >
-                {revealed && player.number ? (
+                {revealed && player.number && player.number!=="0" ? (
                     <span className="text-2xl font-bold">{player.number}</span>
                 ) : (
                     <div className="w-16 h-24 bg-blue-100 rounded"></div>

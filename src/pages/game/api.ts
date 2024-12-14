@@ -17,7 +17,6 @@ export const handleSocketMessages = (message:MessageEvent<any>,setPlayers:Dispat
                 }
 
                 case "all":{
-                    console.log("object");
                     setPlayers(data.players)
                     break;                    
                 }
@@ -30,6 +29,7 @@ export const handleSocketMessages = (message:MessageEvent<any>,setPlayers:Dispat
                             : player
                         )
                       );
+
                     break;
                 }
 
@@ -70,12 +70,6 @@ export const handleSocketRequests = async (data:RequestArgs)=>{
                 case "join":{
                     data.socket?.send(JSON.stringify({
                         type:data.type,
-                        name:data.name,
-                        userId:userId,
-                        gameId:data.gameId
-                    }))
-                    data.socket?.send(JSON.stringify({
-                        type:"all",
                         name:data.name,
                         userId:userId,
                         gameId:data.gameId

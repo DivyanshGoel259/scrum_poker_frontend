@@ -9,11 +9,16 @@ import { globalState } from "./../../globalState";
 
 const Cards = ["2", "4", "6", "1", "8"];
 
+interface Selected {
+  card:string,
+  selected:boolean
+}
+
 export const Game = () => {
   const [isDialogueOpen, setDialogueOpen] = useState(false);
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [players, setPlayers] = useState<Array<Player> | undefined>();
-  const [selected, setSelected] = useState(false);
+  const [selected, setSelected] = useState<Selected>({card:"0",selected:false});
   const [revealed, setrevealed] = useState(false);
   const { gameId } = useParams();
   const [searchParams] = useSearchParams();
@@ -32,6 +37,7 @@ export const Game = () => {
         gameId: gameId,
       };
       await handleSocketRequests(data);
+      setSelected(prevCard=>({...prevCard,card:card,selected:true}))
     } catch (err: any) {
       console.log(err.message);
     }
@@ -60,10 +66,13 @@ export const Game = () => {
         setDialogueOpen(true);
       }
       const userId = localStorage.getItem("userId");
-      const socket = new WebSocket(`ws://localhost:8080?userId=${userId}`);
+      const socket = new WebSocket(`ws://localhost:8080?userId=${userId}`);      
       socket.onopen = () => {
         console.log("connection Established");
         setSocket(socket);
+        setTimeout(()=>{
+          if(isRedirect){handleSocketRequests({socket,gameId,type:"all",name:name!})}
+        },2000)        
       };
       socket.onerror = (err: any) => {
         throw err;
@@ -112,7 +121,7 @@ export const Game = () => {
                 key={card}
                 onClick={() => handleSelect(card)}
                 className={`
-                  ${selected 
+                  ${selected && selected.card===card
                     ? "bg-blue-500 text-white" 
                     : "hover:bg-blue-500 hover:text-white"}
                   cursor-pointer 
